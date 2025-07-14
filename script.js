@@ -93,8 +93,6 @@ const semesters = [
   }
 ];
 
-// Aquí definimos los prerequisitos explícitos de cada ramo
-// Los que no están listados se asumen sin prerequisitos
 const prerequisitos = {
   "Metodología de la Investigación Cualitativa": ["Introducción a la investigación en las ciencias sociales"],
   "Metodología de la Investigación Cuantitativa": ["Metodología de la Investigación Cualitativa"],
@@ -120,23 +118,37 @@ const prerequisitos = {
   "Taller Clínico 2": ["Taller Clínico 1"],
   "Seminario de Tesis": ["Taller Educacional 2", "Taller de Cambio en las Organizaciones", "Taller Clínico 2"],
   "Tesis": ["Seminario de Tesis", "Práctica Profesional"]
-  // Puedes añadir más prerequisitos si existen
 };
 
-// Guarda el estado: qué ramos están aprobados y desbloqueados
-const state = {};
 const malla = document.getElementById("malla-container");
+const state = {};
 
-// Función que verifica si todos los prerequisitos están aprobados
+// Función para chequear si todos los prerequisitos están aprobados
 function prereqsAprobados(course) {
-  if (!prerequisitos[course]) return true; // sin prereq, siempre desbloqueado
+  if (!prerequisitos[course]) return true;
   return prerequisitos[course].every(pr => state[pr] && state[pr].approved);
 }
 
-// Crear la malla
+// Función para actualizar el desbloqueo de todos los cursos
+function actualizarDesbloqueos() {
+  let cambios;
+  do {
+    cambios = false;
+    Object.keys(state).forEach(course => {
+      if (!state[course].unlocked && prereqsAprobados(course)) {
+        state[course].unlocked = true;
+        state[course].element.classList.remove("locked");
+        cambios = true;
+      }
+    });
+  } while (cambios);
+}
+
+// Crear la malla curricular en el DOM
 semesters.forEach((semester, index) => {
   const semDiv = document.createElement("div");
   semDiv.className = "semester";
+
   const title = document.createElement("h2");
   title.textContent = semester.name;
   semDiv.appendChild(title);
@@ -147,29 +159,24 @@ semesters.forEach((semester, index) => {
     div.textContent = course;
     div.dataset.name = course;
 
-    // Inicializamos estado: aprobado y desbloqueado (solo desbloqueados si cumplen prereqs)
+    // Inicializar estado: aprobado = false, desbloqueado si no tiene prerequisitos
     state[course] = {
       element: div,
       approved: false,
-      unlocked: index === 0 // primer semestre desbloqueado inicialmente
+      unlocked: prereqsAprobados(course) // desbloqueado si no tiene prerequisitos
     };
 
-    // Bloquear si no está desbloqueado al principio
-    if (!state[course].unlocked) div.classList.add("locked");
+    if (!state[course].unlocked) {
+      div.classList.add("locked");
+    }
 
     div.addEventListener("click", () => {
       if (!state[course].unlocked || state[course].approved) return;
-      // Aprobar ramo
+      // Aprobar curso
       state[course].approved = true;
       div.classList.add("approved");
-
-      // Intentar desbloquear todos los cursos revisando prerequisitos
-      Object.keys(state).forEach(c => {
-        if (!state[c].unlocked && prereqsAprobados(c)) {
-          state[c].unlocked = true;
-          state[c].element.classList.remove("locked");
-        }
-      });
+      // Actualizar desbloqueos en cadena
+      actualizarDesbloqueos();
     });
 
     semDiv.appendChild(div);
