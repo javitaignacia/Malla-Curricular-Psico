@@ -88,7 +88,7 @@ const semesters = [
     ]
   },
   {
-    name: "10° Semestre",
+   name: "10° Semestre",
     courses: ["Tesis"]
   }
 ];
@@ -126,6 +126,20 @@ const unlocksMap = {
 const malla = document.getElementById("malla-container");
 const state = {};
 
+function unlockCourses(courseName) {
+  const unlocks = unlocksMap[courseName];
+  if (!unlocks) return;
+  unlocks.forEach((name) => {
+    const target = state[name];
+    if (target && !target.unlocked) {
+      target.unlocked = true;
+      target.element.classList.remove("locked");
+      // Desbloquear en cadena
+      unlockCourses(name);
+    }
+  });
+}
+
 semesters.forEach((semester, index) => {
   const semDiv = document.createElement("div");
   semDiv.className = "semester";
@@ -147,16 +161,7 @@ semesters.forEach((semester, index) => {
     div.addEventListener("click", () => {
       if (!state[course].unlocked || div.classList.contains("approved")) return;
       div.classList.add("approved");
-      const unlocks = unlocksMap[course];
-      if (unlocks) {
-        unlocks.forEach((name) => {
-          const target = state[name];
-          if (target && !target.unlocked) {
-            target.unlocked = true;
-            target.element.classList.remove("locked");
-          }
-        });
-      }
+      unlockCourses(course);
     });
 
     semDiv.appendChild(div);
