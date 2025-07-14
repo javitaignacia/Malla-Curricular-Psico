@@ -126,9 +126,6 @@ const unlocksMap = {
 const malla = document.getElementById("malla-container");
 const state = {};
 
-// Leer progreso guardado (aprobados)
-const savedApproved = JSON.parse(localStorage.getItem("approvedCourses")) || [];
-
 semesters.forEach((semester, index) => {
   const semDiv = document.createElement("div");
   semDiv.className = "semester";
@@ -142,26 +139,14 @@ semesters.forEach((semester, index) => {
     div.textContent = course;
     div.dataset.name = course;
 
-    // Primer semestre desbloqueado por defecto
     const isFirstSemester = index === 0;
+    state[course] = { element: div, unlocked: isFirstSemester };
 
-    // Estado: desbloqueado si primer semestre o aprobado antes
-    const approvedBefore = savedApproved.includes(course);
-    state[course] = { element: div, unlocked: isFirstSemester || approvedBefore };
-
-    if (!state[course].unlocked) div.classList.add("locked");
-    if (approvedBefore) div.classList.add("approved");
+    if (!isFirstSemester) div.classList.add("locked");
 
     div.addEventListener("click", () => {
       if (!state[course].unlocked || div.classList.contains("approved")) return;
       div.classList.add("approved");
-      state[course].unlocked = true;
-
-      // Guardar aprobado
-      savedApproved.push(course);
-      localStorage.setItem("approvedCourses", JSON.stringify(savedApproved));
-
-      // Desbloquear siguientes
       const unlocks = unlocksMap[course];
       if (unlocks) {
         unlocks.forEach((name) => {
