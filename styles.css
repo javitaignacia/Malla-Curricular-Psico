@@ -1,64 +1,74 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: #f3f0f9;
-  color: #3d0075;
-  text-align: center;
+  background-color: #f8f5fc;
   margin: 0;
   padding: 0;
 }
 
 h1 {
-  padding: 20px;
-  background-color: #a678f2;
-  color: white;
-  margin-bottom: 20px;
-}
-
-.semester {
-  margin-bottom: 30px;
-  padding: 10px 20px;
-  border-top: 3px solid #a678f2;
-  text-align: left;
-}
-
-.semester h2 {
-  color: #5c0faf;
-  margin-bottom: 10px;
-  font-size: 20px;
-}
-
-.course {
-  display: inline-block;
-  padding: 15px 10px;
-  margin: 8px;
-  width: 220px;
-  background-color: #a678f2;
-  border: 2px solid #5c0faf;
-  border-radius: 12px;
-  cursor: pointer;
-  color: white;
-  font-weight: bold;
-  user-select: none;
-  transition: background-color 0.3s, transform 0.2s;
-  box-sizing: border-box;
   text-align: center;
+  padding: 1rem;
+  color: #5a2a82;
 }
 
-.course:hover:not(.locked):not(.approved) {
-  background-color: #7e57c2;
-  transform: scale(1.05);
+#malla-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+/* Cada semestre como tarjeta vertical */
+.semester {
+  display: flex;
+  flex-direction: column;
+  background-color: #e9d9f7;
+  border: 2px solid #c9a0e8;
+  border-radius: 15px;
+  padding: 1rem;
+  width: 220px;
+  box-shadow: 0 4px 8px rgba(90, 42, 130, 0.1);
+  flex-shrink: 0;
+}
+
+/* Título del semestre */
+.semester > h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  color: #5a2a82;
+  text-align: center;
+  border-bottom: 1px solid #c9a0e8;
+  padding-bottom: 0.5rem;
+}
+
+/* Cada curso */
+.course {
+  background-color: #caa5ec;
+  border: 2px solid #9c6edc;
+  color: white;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 10px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.course:hover {
+  background-color: #b28ed6;
+  transform: scale(1.03);
 }
 
 .course.locked {
-  background-color: #d3cce6;
-  opacity: 0.6;
+  background-color: #ddd;
+  border-color: #aaa;
+  color: #888;
   cursor: not-allowed;
-  pointer-events: none;
-  color: #7a6eaa;
 }
 
 .course.approved {
-  background-color: #4a148c;
-  text-decoration: line-through;
-  cursor: default;
+  background-color: #7b35c8;
+  border-color: #5e28a4;
 }
