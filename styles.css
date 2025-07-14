@@ -23,6 +23,24 @@ h1 {
   margin: auto;
 }
 
+.semester {
+  margin-bottom: 30px;
+  padding: 10px 20px;
+  border-top: 3px solid #a678f2;
+}
+
+.semester h2 {
+  text-align: left;
+  color: #5c0faf;
+  margin-bottom: 10px;
+}
+
+.semester .course {
+  display: inline-block;
+  margin: 5px;
+  width: 220px;
+}
+
 .course {
   padding: 10px;
   background-color: #e0d4f7;
