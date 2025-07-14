@@ -1,77 +1,166 @@
-const courses = [
-  { name: "Filosofía" },
-  { name: "Introducción a la investigación en las ciencias sociales", unlocks: ["Metodología de la Investigación Cualitativa"] },
-  { name: "Historia de la psicología" },
-  { name: "Antropología cultural" },
-  { name: "Teoría social y mundo contemporáneo" },
-  { name: "Inglés 1", unlocks: ["Inglés 2"] },
-  { name: "Procesos psicológicos" },
-  { name: "Neuropsicología 1", unlocks: ["Neuropsicología 2"] },
-  { name: "Psicología Social 1", unlocks: ["Psicología Social 2"] },
-  { name: "Epistemología Psicológica" },
-  { name: "Metodología de la Investigación Cualitativa", unlocks: ["Metodología de la Investigación Cuantitativa"] },
-  { name: "Inglés 2", unlocks: ["Inglés 3"] },
-  { name: "Psicopatología 1", unlocks: ["Psicopatología 2"] },
-  { name: "Psicología del Desarrollo 1", unlocks: ["Psicología del Desarrollo 2"] },
-  { name: "Psicología Social 2" },
-  { name: "Neuropsicología 2" },
-  { name: "Metodología de la Investigación Cuantitativa", unlocks: ["Taller de investigación"] },
-  { name: "Psicometría 1", unlocks: ["Psicometría 2"] },
-  { name: "Inglés 3", unlocks: ["Inglés 4"] },
-  { name: "Psicopatología 2", unlocks: ["Taller Clínico 1"] },
-  { name: "Psicología del Desarrollo 2", unlocks: ["Fundamentos Conceptuales de la Clínica Infanto Juvenil"] },
-  { name: "Psicología del Aprendizaje", unlocks: ["Psicología Educacional 1"] },
-  { name: "Psicología del Trabajo y de las Organizaciones", unlocks: ["Comportamiento Humano en las Organizaciones"] },
-  { name: "Psicometría 2" },
-  { name: "Inglés 4" },
-  { name: "Psicología Educacional 1", unlocks: ["Psicología Educacional 2"] },
-  { name: "Comportamiento Humano en las Organizaciones", unlocks: ["Gestión de Recursos Humanos"] },
-  { name: "Fundamentos Conceptuales de la Clínica Psicoanalítica" },
-  { name: "Fundamentos Conceptuales de la Clínica Cognitiva" },
-  { name: "Análisis de Problemas Psicosociales" },
-  { name: "Taller de investigación" },
-  { name: "Psicología Educacional 2", unlocks: ["Taller Educacional 1"] },
-  { name: "Fundamentos Conceptuales de la Clínica Sistémica" },
-  { name: "Fundamentos Conceptuales de la Clínica Infanto Juvenil" },
-  { name: "Gestión de Recursos Humanos", unlocks: ["Taller de Análisis de las Organizaciones"] },
-  { name: "Taller Educacional 1", unlocks: ["Taller Educacional 2"] },
-  { name: "Taller de Análisis de las Organizaciones", unlocks: ["Taller de Cambio en las Organizaciones"] },
-  { name: "Taller Clínico 1", unlocks: ["Taller Clínico 2"] },
-  { name: "Taller Educacional 2", unlocks: ["Seminario de Tesis"] },
-  { name: "Taller de Cambio en las Organizaciones", unlocks: ["Seminario de Tesis"] },
-  { name: "Taller Clínico 2", unlocks: ["Seminario de Tesis"] },
-  { name: "Seminario de Tesis", unlocks: ["Tesis"] },
-  { name: "Práctica Profesional", unlocks: ["Tesis"] },
-  { name: "Tesis" }
+const semesters = [
+  {
+    name: "1° Semestre",
+    courses: [
+      "Filosofía",
+      "Introducción a la investigación en las ciencias sociales",
+      "Historia de la psicología",
+      "Antropología cultural",
+      "Teoría social y mundo contemporáneo"
+    ]
+  },
+  {
+    name: "2° Semestre",
+    courses: [
+      "Inglés 1",
+      "Procesos psicológicos",
+      "Neuropsicología 1",
+      "Psicología Social 1",
+      "Epistemología Psicológica",
+      "Metodología de la Investigación Cualitativa"
+    ]
+  },
+  {
+    name: "3° Semestre",
+    courses: [
+      "Inglés 2",
+      "Psicopatología 1",
+      "Psicología del Desarrollo 1",
+      "Psicología Social 2",
+      "Neuropsicología 2",
+      "Metodología de la Investigación Cuantitativa",
+      "Psicometría 1"
+    ]
+  },
+  {
+    name: "4° Semestre",
+    courses: [
+      "Inglés 3",
+      "Psicopatología 2",
+      "Psicología del Desarrollo 2",
+      "Psicología del Aprendizaje",
+      "Psicología del Trabajo y de las Organizaciones",
+      "Psicometría 2"
+    ]
+  },
+  {
+    name: "5° Semestre",
+    courses: [
+      "Inglés 4",
+      "Psicología Educacional 1",
+      "Comportamiento Humano en las Organizaciones",
+      "Fundamentos Conceptuales de la Clínica Psicoanalítica",
+      "Fundamentos Conceptuales de la Clínica Cognitiva",
+      "Análisis de Problemas Psicosociales"
+    ]
+  },
+  {
+    name: "6° Semestre",
+    courses: [
+      "Taller de investigación",
+      "Psicología Educacional 2",
+      "Fundamentos Conceptuales de la Clínica Sistémica",
+      "Fundamentos Conceptuales de la Clínica Infanto Juvenil",
+      "Gestión de Recursos Humanos"
+    ]
+  },
+  {
+    name: "7° Semestre",
+    courses: [
+      "Taller Educacional 1",
+      "Taller de Análisis de las Organizaciones",
+      "Taller Clínico 1"
+    ]
+  },
+  {
+    name: "8° Semestre",
+    courses: [
+      "Taller Educacional 2",
+      "Taller de Cambio en las Organizaciones",
+      "Taller Clínico 2"
+    ]
+  },
+  {
+    name: "9° Semestre",
+    courses: [
+      "Seminario de Tesis",
+      "Práctica Profesional"
+    ]
+  },
+  {
+    name: "10° Semestre",
+    courses: ["Tesis"]
+  }
 ];
 
-const malla = document.getElementById('malla');
+const unlocksMap = {
+  "Introducción a la investigación en las ciencias sociales": ["Metodología de la Investigación Cualitativa"],
+  "Metodología de la Investigación Cualitativa": ["Metodología de la Investigación Cuantitativa"],
+  "Metodología de la Investigación Cuantitativa": ["Taller de investigación"],
+  "Inglés 1": ["Inglés 2"],
+  "Inglés 2": ["Inglés 3"],
+  "Inglés 3": ["Inglés 4"],
+  "Neuropsicología 1": ["Neuropsicología 2"],
+  "Psicología Social 1": ["Psicología Social 2"],
+  "Psicopatología 1": ["Psicopatología 2"],
+  "Psicología del Desarrollo 1": ["Psicología del Desarrollo 2"],
+  "Psicometría 1": ["Psicometría 2"],
+  "Psicopatología 2": ["Taller Clínico 1"],
+  "Psicología del Desarrollo 2": ["Fundamentos Conceptuales de la Clínica Infanto Juvenil"],
+  "Psicología del Aprendizaje": ["Psicología Educacional 1"],
+  "Psicología del Trabajo y de las Organizaciones": ["Comportamiento Humano en las Organizaciones"],
+  "Psicología Educacional 1": ["Psicología Educacional 2"],
+  "Comportamiento Humano en las Organizaciones": ["Gestión de Recursos Humanos"],
+  "Psicología Educacional 2": ["Taller Educacional 1"],
+  "Gestión de Recursos Humanos": ["Taller de Análisis de las Organizaciones"],
+  "Taller Educacional 1": ["Taller Educacional 2"],
+  "Taller de Análisis de las Organizaciones": ["Taller de Cambio en las Organizaciones"],
+  "Taller Clínico 1": ["Taller Clínico 2"],
+  "Taller Educacional 2": ["Seminario de Tesis"],
+  "Taller de Cambio en las Organizaciones": ["Seminario de Tesis"],
+  "Taller Clínico 2": ["Seminario de Tesis"],
+  "Seminario de Tesis": ["Tesis"],
+  "Práctica Profesional": ["Tesis"]
+};
+
+const malla = document.getElementById("malla-container");
 const state = {};
 
-courses.forEach((course, index) => {
-  const div = document.createElement('div');
-  div.className = 'course';
-  div.textContent = course.name;
-  div.dataset.name = course.name;
-  state[course.name] = { element: div, unlocked: index < 5 };
+semesters.forEach((semester, index) => {
+  const semDiv = document.createElement("div");
+  semDiv.className = "semester";
+  const title = document.createElement("h2");
+  title.textContent = semester.name;
+  semDiv.appendChild(title);
 
-  if (!state[course.name].unlocked) {
-    div.classList.add('locked');
-  }
+  semester.courses.forEach((course) => {
+    const div = document.createElement("div");
+    div.className = "course";
+    div.textContent = course;
+    div.dataset.name = course;
 
-  div.addEventListener('click', () => {
-    if (!state[course.name].unlocked || div.classList.contains('approved')) return;
-    div.classList.add('approved');
-    if (course.unlocks) {
-      course.unlocks.forEach(name => {
-        const target = state[name];
-        if (target && !target.unlocked) {
-          target.unlocked = true;
-          target.element.classList.remove('locked');
-        }
-      });
-    }
+    const isFirstSemester = index === 0;
+    state[course] = { element: div, unlocked: isFirstSemester };
+
+    if (!isFirstSemester) div.classList.add("locked");
+
+    div.addEventListener("click", () => {
+      if (!state[course].unlocked || div.classList.contains("approved")) return;
+      div.classList.add("approved");
+      const unlocks = unlocksMap[course];
+      if (unlocks) {
+        unlocks.forEach((name) => {
+          const target = state[name];
+          if (target && !target.unlocked) {
+            target.unlocked = true;
+            target.element.classList.remove("locked");
+          }
+        });
+      }
+    });
+
+    semDiv.appendChild(div);
   });
 
-  malla.appendChild(div);
+  malla.appendChild(semDiv);
 });
