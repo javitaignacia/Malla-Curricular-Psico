@@ -88,58 +88,52 @@ const semesters = [
     ]
   },
   {
-   name: "10° Semestre",
+    name: "10° Semestre",
     courses: ["Tesis"]
   }
 ];
 
-const unlocksMap = {
-  "Introducción a la investigación en las ciencias sociales": ["Metodología de la Investigación Cualitativa"],
-  "Metodología de la Investigación Cualitativa": ["Metodología de la Investigación Cuantitativa"],
-  "Metodología de la Investigación Cuantitativa": ["Taller de investigación"],
-  "Inglés 1": ["Inglés 2"],
-  "Inglés 2": ["Inglés 3"],
-  "Inglés 3": ["Inglés 4"],
-  "Neuropsicología 1": ["Neuropsicología 2"],
-  "Psicología Social 1": ["Psicología Social 2"],
-  "Psicopatología 1": ["Psicopatología 2"],
-  "Psicología del Desarrollo 1": ["Psicología del Desarrollo 2"],
-  "Psicometría 1": ["Psicometría 2"],
-  "Psicopatología 2": ["Taller Clínico 1"],
-  "Psicología del Desarrollo 2": ["Fundamentos Conceptuales de la Clínica Infanto Juvenil"],
-  "Psicología del Aprendizaje": ["Psicología Educacional 1"],
-  "Psicología del Trabajo y de las Organizaciones": ["Comportamiento Humano en las Organizaciones"],
-  "Psicología Educacional 1": ["Psicología Educacional 2"],
-  "Comportamiento Humano en las Organizaciones": ["Gestión de Recursos Humanos"],
-  "Psicología Educacional 2": ["Taller Educacional 1"],
-  "Gestión de Recursos Humanos": ["Taller de Análisis de las Organizaciones"],
-  "Taller Educacional 1": ["Taller Educacional 2"],
-  "Taller de Análisis de las Organizaciones": ["Taller de Cambio en las Organizaciones"],
-  "Taller Clínico 1": ["Taller Clínico 2"],
-  "Taller Educacional 2": ["Seminario de Tesis"],
-  "Taller de Cambio en las Organizaciones": ["Seminario de Tesis"],
-  "Taller Clínico 2": ["Seminario de Tesis"],
-  "Seminario de Tesis": ["Tesis"],
-  "Práctica Profesional": ["Tesis"]
+// Aquí definimos los prerequisitos explícitos de cada ramo
+// Los que no están listados se asumen sin prerequisitos
+const prerequisitos = {
+  "Metodología de la Investigación Cualitativa": ["Introducción a la investigación en las ciencias sociales"],
+  "Metodología de la Investigación Cuantitativa": ["Metodología de la Investigación Cualitativa"],
+  "Taller de investigación": ["Metodología de la Investigación Cuantitativa"],
+  "Inglés 2": ["Inglés 1"],
+  "Inglés 3": ["Inglés 2"],
+  "Inglés 4": ["Inglés 3"],
+  "Neuropsicología 2": ["Neuropsicología 1"],
+  "Psicología Social 2": ["Psicología Social 1"],
+  "Psicopatología 2": ["Psicopatología 1"],
+  "Psicología del Desarrollo 2": ["Psicología del Desarrollo 1"],
+  "Psicometría 2": ["Psicometría 1"],
+  "Taller Clínico 1": ["Psicopatología 2"],
+  "Fundamentos Conceptuales de la Clínica Infanto Juvenil": ["Psicología del Desarrollo 2"],
+  "Psicología Educacional 1": ["Psicología del Aprendizaje"],
+  "Comportamiento Humano en las Organizaciones": ["Psicología del Trabajo y de las Organizaciones"],
+  "Psicología Educacional 2": ["Psicología Educacional 1"],
+  "Gestión de Recursos Humanos": ["Comportamiento Humano en las Organizaciones"],
+  "Taller Educacional 1": ["Psicología Educacional 2"],
+  "Taller de Análisis de las Organizaciones": ["Gestión de Recursos Humanos"],
+  "Taller Educacional 2": ["Taller Educacional 1"],
+  "Taller de Cambio en las Organizaciones": ["Taller de Análisis de las Organizaciones"],
+  "Taller Clínico 2": ["Taller Clínico 1"],
+  "Seminario de Tesis": ["Taller Educacional 2", "Taller de Cambio en las Organizaciones", "Taller Clínico 2"],
+  "Tesis": ["Seminario de Tesis", "Práctica Profesional"]
+  // Puedes añadir más prerequisitos si existen
 };
 
-const malla = document.getElementById("malla-container");
+// Guarda el estado: qué ramos están aprobados y desbloqueados
 const state = {};
+const malla = document.getElementById("malla-container");
 
-function unlockCourses(courseName) {
-  const unlocks = unlocksMap[courseName];
-  if (!unlocks) return;
-  unlocks.forEach((name) => {
-    const target = state[name];
-    if (target && !target.unlocked) {
-      target.unlocked = true;
-      target.element.classList.remove("locked");
-      // Desbloquear en cadena
-      unlockCourses(name);
-    }
-  });
+// Función que verifica si todos los prerequisitos están aprobados
+function prereqsAprobados(course) {
+  if (!prerequisitos[course]) return true; // sin prereq, siempre desbloqueado
+  return prerequisitos[course].every(pr => state[pr] && state[pr].approved);
 }
 
+// Crear la malla
 semesters.forEach((semester, index) => {
   const semDiv = document.createElement("div");
   semDiv.className = "semester";
@@ -147,21 +141,35 @@ semesters.forEach((semester, index) => {
   title.textContent = semester.name;
   semDiv.appendChild(title);
 
-  semester.courses.forEach((course) => {
+  semester.courses.forEach(course => {
     const div = document.createElement("div");
     div.className = "course";
     div.textContent = course;
     div.dataset.name = course;
 
-    const isFirstSemester = index === 0;
-    state[course] = { element: div, unlocked: isFirstSemester };
+    // Inicializamos estado: aprobado y desbloqueado (solo desbloqueados si cumplen prereqs)
+    state[course] = {
+      element: div,
+      approved: false,
+      unlocked: index === 0 // primer semestre desbloqueado inicialmente
+    };
 
-    if (!isFirstSemester) div.classList.add("locked");
+    // Bloquear si no está desbloqueado al principio
+    if (!state[course].unlocked) div.classList.add("locked");
 
     div.addEventListener("click", () => {
-      if (!state[course].unlocked || div.classList.contains("approved")) return;
+      if (!state[course].unlocked || state[course].approved) return;
+      // Aprobar ramo
+      state[course].approved = true;
       div.classList.add("approved");
-      unlockCourses(course);
+
+      // Intentar desbloquear todos los cursos revisando prerequisitos
+      Object.keys(state).forEach(c => {
+        if (!state[c].unlocked && prereqsAprobados(c)) {
+          state[c].unlocked = true;
+          state[c].element.classList.remove("locked");
+        }
+      });
     });
 
     semDiv.appendChild(div);
